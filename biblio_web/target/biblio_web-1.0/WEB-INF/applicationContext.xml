@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<tx:advice id="defaultTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="restore*" propagation="REQUIRED" />
+			<tx:method name="loadUserByUsername*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="defaultServiceOperation"
+			expression="execution(* com.app.business.service.impl.*service*.*(..))" />
+		<aop:advisor pointcut-ref="defaultServiceOperation"
+			advice-ref="defaultTxAdvice" />
+	</aop:config>
+
+
+
+
+	<!-- ATTENTION les actions ne sont pas des singletons il faut l'indiquer 
+		explicitement à spring par singleton=false ou dans les versions récentes 
+		du framewrok par scope="prototype" -->
+
+
+</beans>
